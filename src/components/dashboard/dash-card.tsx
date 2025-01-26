@@ -1,18 +1,17 @@
 import React from 'react'
 import { Card, CardContent, CardHeader } from '../ui/card'
-
 interface DashCardProps {
     title?: string;
 }
 
-function DashCard({ title }: DashCardProps) {
+function DashCard({ title, children }: React.PropsWithChildren<DashCardProps>) {
   return (
-    <Card>
-      <CardHeader className='w-[550px]'>
+    <Card className='w-[650px] h-[500px]'>
+      <CardHeader className='text-center'>
         <p className='text-xxl font-semibold'>{ title }</p>
       </CardHeader>
-      <CardContent className='bg-yellow-200'>
-
+      <CardContent className=''>
+        {children}
       </CardContent>
     </Card>
   )
