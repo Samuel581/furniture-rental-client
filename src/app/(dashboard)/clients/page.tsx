@@ -1,6 +1,7 @@
 import ClientsDisplayTable from '@/components/clients/clients-display-table'
 import React from 'react'
 
+
 function page() {
   return (
     <div className='gap-5'>
