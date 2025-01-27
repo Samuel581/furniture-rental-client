@@ -2,10 +2,14 @@
 import { Phone, Map, Notebook } from "lucide-react";
 import { clientsService } from "@/services/client";
 import { useQuery } from "@tanstack/react-query";
-import GoogleMap from "../misc/google-map";
+import dynamic from "next/dynamic";
 interface ClientInfoCardProps {
   id: string;
 }
+const MapComponent = dynamic(() => import("../misc/google-map"), {
+  ssr: false,
+  loading: () => <div className="h-[400px] w-full bg-gray-100 animate-pulse" />,
+});
 
 function ClientInfoCard({ id }: ClientInfoCardProps) {
   const {
@@ -25,6 +29,20 @@ function ClientInfoCard({ id }: ClientInfoCardProps) {
     return <div>Error loading clients</div>;
   }
 
+  // Let's add some validation to ensure we have valid coordinates
+  if (!client?.latitude || !client?.longitude) {
+    console.warn("Missing coordinates for client:", client?.id);
+    return <div>Invalid client location data</div>;
+  }
+
+  const center = {
+    lat: client.latitude,
+    lng: client.longitude,
+  };
+
+  // Add some console logging to help debug
+  console.log("Center coordinates:", center);
+
   return (
     <>
       <div className="flex flex-col gap-3">
@@ -43,8 +61,10 @@ function ClientInfoCard({ id }: ClientInfoCardProps) {
             <p className="text-xl">{client.notes}</p>
           </div>
         )}
+        <div className="w-full">
+          <MapComponent center={center} zoom={15} />
+        </div>
       </div>
-      <GoogleMap lat={client?.latitude ?? 0} lng={client?.longitude ?? 0} />
     </>
   );
 }
