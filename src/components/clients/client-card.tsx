@@ -6,10 +6,6 @@ import dynamic from "next/dynamic";
 interface ClientInfoCardProps {
   id: string;
 }
-const MapComponent = dynamic(() => import("../misc/google-map"), {
-  ssr: false,
-  loading: () => <div className="h-[400px] w-full bg-gray-100 animate-pulse" />,
-});
 
 function ClientInfoCard({ id }: ClientInfoCardProps) {
   const {
@@ -19,20 +15,60 @@ function ClientInfoCard({ id }: ClientInfoCardProps) {
   } = useQuery({
     queryKey: ["client", id],
     queryFn: () => clientsService.getById(id),
+    retry: 2,
+    staleTime: 1000 * 60 * 5,
   });
 
+  
+const MapComponent = dynamic(() => import("../misc/google-map"), {
+  ssr: false,
+  loading: () => <div className="h-[400px] w-full bg-gray-100 animate-pulse" />,
+});
+
+
+
+  console.log(client)
+
   if (isLoading) {
-    return <div>Loading clients...</div>;
+    return (
+      <div className="animate-pulse space-y-4">
+        <div className="h-8 w-48 bg-gray-200 rounded" />
+        <div className="h-6 w-32 bg-gray-200 rounded" />
+        <div className="h-6 w-64 bg-gray-200 rounded" />
+        <div className="h-[400px] w-full bg-gray-100 rounded-lg" />
+      </div>
+    )
   }
 
   if (error) {
-    return <div>Error loading clients</div>;
+    return (
+      <div className="rounded-lg border border-red-200 p-4 bg-red-50 text-red-700">
+        Error loading client information. Please try again later.
+      </div>
+    );
   }
 
-  // Let's add some validation to ensure we have valid coordinates
-  if (!client?.latitude || !client?.longitude) {
-    console.warn("Missing coordinates for client:", client?.id);
-    return <div>Invalid client location data</div>;
+  // Validate client data existence
+  if (!client) {
+    return (
+      <div className="rounded-lg border border-yellow-200 p-4 bg-yellow-50 text-yellow-700">
+        No client data found
+      </div>
+    );
+  }
+
+  // Validate coordinates
+  const hasValidCoordinates = 
+    typeof client.latitude === 'number' && 
+    typeof client.longitude === 'number' &&
+    !isNaN(client.latitude) && 
+    !isNaN(client.longitude);
+
+  if (!hasValidCoordinates) {
+    console.warn(`Invalid coordinates for client ${client.id}:`, {
+      latitude: client.latitude,
+      longitude: client.longitude
+    });
   }
 
   const center = {
