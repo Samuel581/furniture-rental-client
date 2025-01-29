@@ -16,6 +16,7 @@ import { clientsService } from '@/services/client';
 import { Client } from "@/interfaces/user.interface";
 import { Badge } from "../ui/badge";
 import { useRouter } from "next/navigation";
+import { Button } from "../ui/button";
 
 // This function contains the info to setup the table later, also includes the type or interface of the data it'll recieve
 // to not have errors of differ
@@ -24,20 +25,30 @@ const columnHelper = createColumnHelper<Client>();
 const ActionButons = ({ client }: { client: Client }) => {
   
   const router = useRouter();
-  console.log('Client in ActionButtons:', client);
+
   return (
     <div className="flex flex-row justify-evenly">
     <button className="px-2 py-1 bg-blue-500 text-white rounded"
     onClick={() => router.push(`/clients/${client.id}`)}>
       <Eye/>
     </button>
-    <button className="px-2 py-1 bg-black text-white rounded">
+    <button className="px-2 py-1 bg-black text-white rounded"
+    onClick={() => router.push(`/clients/${client.id}/edit`)}>
       <UserPen />
     </button>
     <button className="px-2 py-1 bg-red-500 text-white rounded">
       <UserX />
     </button>
   </div>
+  )
+}
+
+const CreateClientButton = () => {
+  const router = useRouter()
+  return(
+    <Button onClick={() => router.push('/clients/create')}>
+      Crear nuevo cliente
+    </Button>
   )
 }
 
@@ -151,6 +162,7 @@ function ClientsDisplayTable() {
         >
           <option value="">Cliente activo</option>
         </select>
+        <CreateClientButton/>
       </div>
       <table className="border w-full">
         {/* Here we poblate the headers columns */}
