@@ -1,7 +1,5 @@
 import ClientsDisplayTable from '@/components/features/clients/clients-display-table'
 import React from 'react'
-
-
 function page() {
   
   return (
