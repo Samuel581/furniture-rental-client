@@ -1,15 +1,15 @@
 'use client'
-import { clientsService } from '@/services/client';
+import { clientsService } from '@/services/client.service';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import React from 'react'
 import { useForm } from 'react-hook-form';
 import z from 'zod'
-import { CardContent, CardFooter } from '../ui/card';
-import { Label } from '../ui/label';
-import { Input } from '../ui/input';
-import { Button } from '../ui/button';
+import { CardContent, CardFooter } from '../../ui/card';
+import { Label } from '../../ui/label';
+import { Input } from '../../ui/input';
+import { Button } from '../../ui/button';
 
 const clientFormSchema = z.object({
   name: z
@@ -44,7 +44,6 @@ function ClientCreateForm() {
         register,
         handleSubmit,
         formState: { errors },
-        reset: resetForm,
     } = useForm<ClientFormData>({
         resolver: zodResolver(clientFormSchema),
         defaultValues: {

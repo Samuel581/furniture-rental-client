@@ -1,6 +1,6 @@
 "use client";
 import { Phone, Map, Notebook } from "lucide-react";
-import { clientsService } from "@/services/client";
+import { clientsService } from "@/services/client.service";
 import { useQuery } from "@tanstack/react-query";
 import dynamic from "next/dynamic";
 interface ClientInfoCardProps {
@@ -20,7 +20,7 @@ function ClientInfoCard({ id }: ClientInfoCardProps) {
   });
 
   
-const MapComponent = dynamic(() => import("../misc/google-map"), {
+const MapComponent = dynamic(() => import("../../core/data-display/map"), {
   ssr: false,
   loading: () => <div className="h-[400px] w-full bg-gray-100 animate-pulse" />,
 });

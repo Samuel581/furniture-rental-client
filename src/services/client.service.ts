@@ -1,5 +1,5 @@
-import { api } from "@/lib/axios";
-import { Client } from "@/interfaces/user.interface";
+import { api } from "@/lib/api/axios";
+import { Client } from "@/types/user.interface";
 import axios from "axios";
 
 export const clientsService = {

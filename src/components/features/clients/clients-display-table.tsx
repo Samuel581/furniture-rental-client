@@ -12,11 +12,11 @@ import {
 import { UserPen, UserX, ArrowBigUp, ArrowBigDown, Eye } from "lucide-react";
 import { useState } from "react";
 import { useQuery } from '@tanstack/react-query';
-import { clientsService } from '@/services/client';
-import { Client } from "@/interfaces/user.interface";
-import { Badge } from "../ui/badge";
+import { clientsService } from '@/services/client.service';
+import { Client } from "@/types/user.interface";
+import { Badge } from "../../ui/badge";
 import { useRouter } from "next/navigation";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 
 // This function contains the info to setup the table later, also includes the type or interface of the data it'll recieve
 // to not have errors of differ

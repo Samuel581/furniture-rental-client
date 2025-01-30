@@ -1,4 +1,4 @@
-import Form from '@/components/clients/client-edit-form';
+import Form from '@/components/features/clients/client-edit-form';
 import React from 'react'
 
 interface PageProps {

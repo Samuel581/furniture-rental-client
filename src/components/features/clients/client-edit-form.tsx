@@ -9,7 +9,7 @@ import { CardContent, CardFooter } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { useParams, useRouter } from "next/navigation";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { clientsService } from "@/services/client";
+import { clientsService } from "@/services/client.service";
 import { useEffect } from "react";
 
 const clientFormSchema = z.object({

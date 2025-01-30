@@ -1,4 +1,4 @@
-import ClientCreateForm from '@/components/clients/client-create-form'
+import ClientCreateForm from '@/components/features/clients/client-create-form'
 import React from 'react'
 
 function page() {

@@ -1,5 +1,5 @@
 import React from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Users, Home, ShoppingBag, Package, ClipboardList } from "lucide-react";

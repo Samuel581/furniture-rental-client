@@ -8,13 +8,14 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { JSX } from "react";
 
 export function DynamicBreadcrumb() {
   const pathname = usePathname();
 
   const generateBreadcrumbs = () => {
     const paths = pathname.split("/").filter((path) => path);
-    let breadcrumbs: any = [];
+    const breadcrumbs: JSX.Element[] = [];
     let href = "";
 
     paths.forEach((path, index) => {

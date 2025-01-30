@@ -1,4 +1,4 @@
-import ClientInfoCard from '@/components/clients/client-card'
+import ClientInfoCard from '@/components/features/clients/client-card'
 import React from 'react'
 interface PageProps {
   params: {

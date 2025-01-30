@@ -1,5 +1,5 @@
 // data/mockUsers.ts
-import { Client } from "@/interfaces/user.interface";
+import { Client } from "@/types/user.interface";
 import { User } from "@/types/user";
 export const mockUsers: User[] = [
     { id: 1, name: "Alice", email: "alice@example.com", role: "Admin" },
