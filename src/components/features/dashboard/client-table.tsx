@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table, TableBody, TableCell, TableRow } from '../ui/table'
+import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table'
 
 function ClientTable() {
     const clients = [

@@ -7,86 +7,56 @@ import {
   flexRender,
   getSortedRowModel,
   SortingState,
-  getFilteredRowModel
+  getFilteredRowModel,
 } from "@tanstack/react-table";
-import { UserPen, UserX, ArrowBigUp, ArrowBigDown, Eye } from "lucide-react";
+import { ArrowBigUp, ArrowBigDown } from "lucide-react";
 import { useState } from "react";
-import { useQuery } from '@tanstack/react-query';
-import { clientsService } from '@/services/client.service';
+import { useQuery } from "@tanstack/react-query";
+import { clientsService } from "@/services/client.service";
 import { Client } from "@/types/user.interface";
 import { Badge } from "../../ui/badge";
-import { useRouter } from "next/navigation";
-import { Button } from "../../ui/button";
-
+import { ActionButons } from "./client-table-action-buttons";
+import { CreateClientButton } from "./create-client-button";
 // This function contains the info to setup the table later, also includes the type or interface of the data it'll recieve
 // to not have errors of differ
 const columnHelper = createColumnHelper<Client>();
-
-const ActionButons = ({ client }: { client: Client }) => {
-  
-  const router = useRouter();
-
-  return (
-    <div className="flex flex-row justify-evenly">
-    <button className="px-2 py-1 bg-blue-500 text-white rounded"
-    onClick={() => router.push(`/clients/${client.id}`)}>
-      <Eye/>
-    </button>
-    <button className="px-2 py-1 bg-black text-white rounded"
-    onClick={() => router.push(`/clients/${client.id}/edit`)}>
-      <UserPen />
-    </button>
-    <button className="px-2 py-1 bg-red-500 text-white rounded">
-      <UserX />
-    </button>
-  </div>
-  )
-}
-
-const CreateClientButton = () => {
-  const router = useRouter()
-  return(
-    <Button onClick={() => router.push('/clients/create')}>
-      Crear nuevo cliente
-    </Button>
-  )
-}
 
 // Here we define the columns and it's headers, we can skip the labels of the API response we don't want to implement
 const columns = [
   columnHelper.accessor("name", {
     header: "Nombre",
     enableSorting: true,
-    sortingFn: 'text'
+    sortingFn: "text",
   }),
   columnHelper.accessor("phone", {
     header: "Telefono",
-    enableSorting: false
+    enableSorting: false,
   }),
   columnHelper.accessor("addressReference", {
     header: "Referencia",
-    enableSorting: false
+    enableSorting: false,
   }),
   columnHelper.accessor("isActive", {
     header: "Activo",
-    enableSorting: true, 
+    enableSorting: true,
     cell: (info) => (
       <Badge variant={info.getValue() ? "success" : "destructive"}>
-        { info.getValue() ? 'Activo' : 'Inactivo' }
+        {info.getValue() ? "Activo" : "Inactivo"}
       </Badge>
-    )
+    ),
   }),
   // This two columns are the actions buttons, those will be setup later but we include them now
   columnHelper.display({
     id: "actions",
     header: "Actions",
-    cell: (props) => { return <ActionButons client={props.row.original}/> }
+    cell: (props) => {
+      return <ActionButons client={props.row.original} />;
+    },
   }),
 ];
 
 //TODO: Explain
 function ClientsDisplayTable() {
-
   const [sorting, setSorting] = useState<SortingState>([]); // Sorting state, from now it's on TO IMPLEMENT
   // Filter state, this will be used to search names
   const [globalFilter, setGlobalFilter] = useState({
@@ -96,8 +66,12 @@ function ClientsDisplayTable() {
 
   // This is how we fetch data using useQuey
   // A bit weird but creative a the same time
-  const { data: clients, isLoading, error } = useQuery({
-    queryKey: ['clients'],
+  const {
+    data: clients,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["clients"],
     queryFn: clientsService.getAll,
   });
 
@@ -110,7 +84,7 @@ function ClientsDisplayTable() {
     // States configured
     state: {
       sorting,
-      globalFilter
+      globalFilter,
     },
     // Filter and sort onChanges and rows
     onSortingChange: setSorting,
@@ -124,7 +98,7 @@ function ClientsDisplayTable() {
       const state = filterValue.state;
       return (
         row.original.name.toLowerCase().includes(search) &&
-        (state === '' || row.original.isActive === state)
+        (state === "" || row.original.isActive === state)
       );
     },
   });
@@ -162,7 +136,7 @@ function ClientsDisplayTable() {
         >
           <option value="">Cliente activo</option>
         </select>
-        <CreateClientButton/>
+        <CreateClientButton />
       </div>
       <table className="border w-full">
         {/* Here we poblate the headers columns */}
@@ -170,17 +144,18 @@ function ClientsDisplayTable() {
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
-                <th 
-                key={header.id} 
-                className="px-4 py-2 border cursor-pointer"
-                onClick={header.column.getToggleSortingHandler()}>
+                <th
+                  key={header.id}
+                  className="px-4 py-2 border cursor-pointer"
+                  onClick={header.column.getToggleSortingHandler()}
+                >
                   {flexRender(
                     header.column.columnDef.header,
                     header.getContext()
                   )}
                   {{
-                    asc: <ArrowBigUp className="inline-block ml-2"/>,
-                    desc: <ArrowBigDown className="inline-block ml-2"/>,
+                    asc: <ArrowBigUp className="inline-block ml-2" />,
+                    desc: <ArrowBigDown className="inline-block ml-2" />,
                   }[header.column.getIsSorted() as string] ?? null}
                 </th>
               ))}
@@ -191,9 +166,7 @@ function ClientsDisplayTable() {
           {table.getRowModel().rows.map((row) => (
             <tr key={row.id}>
               {row.getVisibleCells().map((cell) => (
-                <td 
-                key={cell.id} 
-                className="px-4 py-2 border">
+                <td key={cell.id} className="px-4 py-2 border">
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
               ))}

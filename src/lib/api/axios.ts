@@ -2,18 +2,16 @@
 import axios from 'axios';
 
 export const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'https://furniture-rental-api.onrender.com',
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
-  // Important for CORS with credentials
   withCredentials: true
 });
 
 // Add request interceptor to handle errors
 api.interceptors.request.use(
   (config) => {
-    // You can add auth headers here if needed
     return config;
   },
   (error) => {

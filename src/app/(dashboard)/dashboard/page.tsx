@@ -1,5 +1,5 @@
-import DashboardRows from "@/components/dashboard/dashboard-rows";
-import TotalsRow from "@/components/dashboard/totals-row";
+import DashboardRows from "@/components/features/dashboard/dashboard-rows";
+import TotalsRow from "@/components/features/dashboard/totals-row";
 import React from "react";
 
 function page() {

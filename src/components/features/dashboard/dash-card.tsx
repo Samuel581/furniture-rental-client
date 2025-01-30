@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, CardContent, CardHeader } from '../ui/card'
+import { Card, CardHeader, CardContent } from '@/components/ui/card';
 interface DashCardProps {
     title?: string;
 }
