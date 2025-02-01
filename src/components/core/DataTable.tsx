@@ -18,8 +18,8 @@ type FilterState = {
   [key: string]: string | boolean;
 };
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
+interface DataTableProps<TData> {
+  columns: ColumnDef<TData>[];
   data: TData[];
   filterConfig?: {
     filters: Array<{
@@ -34,13 +34,13 @@ interface DataTableProps<TData, TValue> {
   error?: Error | null;
 }
 
-function DataTable<TData, TValue>({
+function DataTable<TData>({
   columns,
   data,
   filterConfig,
   isLoading,
   error,
-}: DataTableProps<TData, TValue>) {
+}: DataTableProps<TData>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState<FilterState>({});
 
@@ -137,7 +137,7 @@ const FilterInput = ({
   value,
   onChange,
 }: {
-  filter: NonNullable<DataTableProps<unknown, unknown>["filterConfig"]>["filters"][0];
+  filter: NonNullable<DataTableProps<unknown>["filterConfig"]>["filters"][0];
   value: string;
   onChange: (value: string) => void;
 }) => {

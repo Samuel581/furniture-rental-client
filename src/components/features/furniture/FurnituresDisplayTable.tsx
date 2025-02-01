@@ -1,6 +1,6 @@
 "use client";
 import { Furniture } from "@/types/furniture.interface";
-import { createColumnHelper } from "@tanstack/react-table";
+import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import React from "react";
 import FurnitureActionButtons from "./FurnitureActionButtons";
@@ -53,7 +53,7 @@ const columns = [
       return <FurnitureActionButtons furniture={props.row.original} />;
     },
   }),
-];
+] as ColumnDef<Furniture>[];
 
 function FurnituresDisplayTable() {
   const {
@@ -69,7 +69,7 @@ function FurnituresDisplayTable() {
   return (
     <div>
       {/* FIXED: Added the TValue generic parameter as 'any' since we have mixed value types */}
-      <DataTable<Furniture, any>
+      <DataTable<Furniture>
         columns={columns}
         data={furnitures ?? []}
         isLoading={isLoading}
