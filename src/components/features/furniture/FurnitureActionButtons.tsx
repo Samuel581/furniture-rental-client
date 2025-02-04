@@ -7,7 +7,7 @@ function FurnitureActionButtons({ furniture}: { furniture: Furniture }) {
   const router = useRouter();
 
   return (
-    <div className="flex flex-row justify-evenly gap-2">
+    <div className="flex flex-row justify-center gap-2">
       <button
         className="px-2 py-1 bg-blue-500 text-white rounded"
         onClick={() => router.push(`/furniture/${furniture.id}`)}

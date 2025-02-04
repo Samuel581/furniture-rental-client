@@ -6,7 +6,8 @@ import React from "react";
 import FurnitureActionButtons from "./FurnitureActionButtons";
 import { useQuery } from "@tanstack/react-query";
 import { furnitureService } from "@/services/furniture.service";
-import DataTable from "@/components/core/DataTable";
+import DataTable from "@/components/core/data-display/DataTable";
+import { toCurrency } from "@/lib/utils/parseUSD";
 
 export const columnHelper = createColumnHelper<Furniture>();
 
@@ -15,6 +16,7 @@ const columns = [
     header: "Nombre",
     enableSorting: true,
     sortingFn: "text",
+    cell: (info) => <p className="font-semibold">{info.getValue()}</p>,
   }),
   columnHelper.accessor("color", {
     header: "Color",
@@ -32,7 +34,7 @@ const columns = [
     header: "Tarifa diaria",
     enableSorting: false,
     cell: (info) => (
-      <p className="text-right text-green-500 font-semibold">{`$${info.getValue()}`}</p>
+      <p className="text-green-500 font-semibold">{`$${toCurrency(info.getValue())}`}</p>
     ),
   }),
   columnHelper.accessor("isActive", {
@@ -64,11 +66,8 @@ function FurnituresDisplayTable() {
     queryKey: ["furnitures"],
     queryFn: furnitureService.getAll,
   });
-
-  console.log(furnitures);
   return (
     <div>
-      {/* FIXED: Added the TValue generic parameter as 'any' since we have mixed value types */}
       <DataTable<Furniture>
         columns={columns}
         data={furnitures ?? []}
