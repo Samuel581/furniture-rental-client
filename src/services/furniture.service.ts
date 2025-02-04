@@ -4,7 +4,7 @@ import { Furniture } from "@/types/furniture.interface";
 
 export const furnitureService = {
     async getAll() {
-        const response = await api.get<Furniture[]>('/furniture')
+        const response = await api.get<Furniture[]>('/furniture?limit=100')
         return response.data;
     },
 
@@ -22,7 +22,7 @@ export const furnitureService = {
         const response = await api.patch<Furniture>(`/furniture/${id}`, furniture);
         return response.data;
     },
-
+    
     //TODO: Implement markInactive later
     // async markInactive(id: string) {
     //     const response = await api.delete<Furniture>(`/furniture/${id}`);
