@@ -26,9 +26,6 @@ const MapComponent = dynamic(() => import("../../core/data-display/map"), {
 });
 
 
-
-  console.log(client)
-
   if (isLoading) {
     return (
       <div className="animate-pulse space-y-4">

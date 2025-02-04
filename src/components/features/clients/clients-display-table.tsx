@@ -56,7 +56,7 @@ const columns = [
 ];
 
 //TODO: Explain
-function ClientsDisplayTable() {
+function ClientsDisplayTable_Deprecated() {
   const [sorting, setSorting] = useState<SortingState>([]); // Sorting state, from now it's on TO IMPLEMENT
   // Filter state, this will be used to search names
   const [globalFilter, setGlobalFilter] = useState({
@@ -178,4 +178,4 @@ function ClientsDisplayTable() {
   );
 }
 
-export default ClientsDisplayTable;
+export default ClientsDisplayTable_Deprecated;

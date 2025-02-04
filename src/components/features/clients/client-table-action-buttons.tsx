@@ -5,7 +5,7 @@ import { Eye, UserPen, UserX } from "lucide-react";
 export const ActionButons = ({ client }: { client: Client }) => {
     const router = useRouter();
     return (
-      <div className="flex flex-row justify-evenly gap-2">
+      <div className="flex flex-row justify-center gap-2">
         <button
           className="px-2 py-1 bg-blue-500 text-white rounded"
           onClick={() => router.push(`/clients/${client.id}`)}
