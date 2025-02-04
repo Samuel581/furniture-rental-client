@@ -10,9 +10,19 @@ import {
   type SortingState,
   type Column,
   flexRender,
+  getPaginationRowModel,
 } from "@tanstack/react-table";
 import { ArrowBigDown, ArrowBigUp } from "lucide-react";
 import { useState } from "react";
+import {
+  Table,
+  TableHeader,
+  TableRow,
+  TableHead,
+  TableBody,
+  TableCell,
+} from "../../ui/table";
+import { Button } from "@/components/ui/button";
 
 type FilterState = {
   [key: string]: string | boolean;
@@ -50,6 +60,7 @@ function DataTable<TData>({
     state: { sorting, globalFilter },
     onSortingChange: setSorting,
     onGlobalFilterChange: setGlobalFilter,
+    getPaginationRowModel: getPaginationRowModel(),
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
@@ -80,48 +91,69 @@ function DataTable<TData>({
           ))}
         </div>
       )}
-      <table className="border w-full">
-        {/* Table Header */}
-        <thead>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <th
-                  key={header.id}
-                  className="p-2 border"
-                  onClick={header.column.getToggleSortingHandler()}
-                >
-                  {flexRender(
-                    header.column.columnDef.header,
-                    header.getContext()
-                  )}
-                  <SortingIndicator column={header.column} />
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        {/* Table Body */}
-        <tbody>
-          {table.getRowModel().rows.map((row) => (
-            <tr key={row.id}>
-              {row.getVisibleCells().map((cell) => (
-                <td key={cell.id} className="p-2 border">
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className="rounded-md border">
+        <Table className="w-full overflow-hidden shadow-lg">
+          {/* Table Header */}
+          <TableHeader className="bg-gray-100">
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <TableHead
+                    key={header.id}
+                    className="p-2 text-center"
+                    onClick={header.column.getToggleSortingHandler()}
+                  >
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
+                    <SortingIndicator column={header.column} />
+                  </TableHead>
+                ))}
+              </TableRow>
+            ))}
+          </TableHeader>
+          {/* Table Body */}
+          <TableBody>
+            {table.getRowModel().rows.map((row) => (
+              <TableRow key={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id} className="p-2 text-center">
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+      {/* Pagination */}
+      <div className="flex items-center justify-end space-x-2 py-4">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          Pagina anterior
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          Pagina siguiente
+        </Button>
+      </div>
     </div>
   );
 }
 
-const SortingIndicator = <TData,>({ 
-  column 
-}: { 
-  column: Column<TData, unknown> 
+const SortingIndicator = <TData,>({
+  column,
+}: {
+  column: Column<TData, unknown>;
 }) => {
   const sortedState = column.getIsSorted();
   return (
