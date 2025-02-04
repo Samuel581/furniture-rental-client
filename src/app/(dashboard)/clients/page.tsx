@@ -1,4 +1,4 @@
-import ClientsDisplayTable from '@/components/features/clients/clients-display-table'
+import ClientsDisplayTable from '@/components/features/clients/ClientsDisplayTable'
 import React from 'react'
 function page() {
   
