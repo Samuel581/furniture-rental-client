@@ -7,6 +7,7 @@ import { ActionButons } from "./client-table-action-buttons";
 import { useQuery } from "@tanstack/react-query";
 import { clientsService } from "@/services/client.service";
 import DataTable from "@/components/core/data-display/DataTable";
+import { CreateClientButton } from "./create-client-button";
 
 //Colums data definition
 export const columnHelper = createColumnHelper<Client>();
@@ -84,6 +85,7 @@ function ClientsDisplayTable() {
                 return client.name.toLocaleLowerCase().includes(search);
             }
         }}
+        actionButton={<CreateClientButton />}
       />
     </div>
   );

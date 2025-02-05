@@ -1,12 +1,11 @@
 'use client'
 import React from 'react'
-import { useParams } from 'next/navigation'
+import EditFurnitureForm from '@/components/features/furniture/EditFurnitureForm'
 
 function Page() {
-    const { id } = useParams()
   return (
     <div>
-      This is the edit page for the furniture with id: {id}
+      <EditFurnitureForm/>
     </div>
   )
 }
