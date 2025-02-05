@@ -4,7 +4,7 @@ export interface Furniture {
     color: string
     type: string
     stock: number
-    dailyRate: string
+    dailyRate: number
     isActive: boolean
 }
   

@@ -9,15 +9,17 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { furnitureService } from "@/services/furniture.service";
 type FurnitureFormData = z.infer<typeof furnitureSchema>;
 
 function FurnitureForm() {
+  const queryClient = useQueryClient();
   const router = useRouter();
-
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting, isSubmitted },
+    formState: { errors, isSubmitting },
   } = useForm<FurnitureFormData>({
     resolver: zodResolver(furnitureSchema),
     defaultValues: {
@@ -29,9 +31,20 @@ function FurnitureForm() {
     },
   });
 
-  const onSubmit: SubmitHandler<FurnitureFormData> = (data) =>
-    console.log(data);
+  const { mutateAsync: addFurniture } = useMutation({
+    mutationFn: (data: FurnitureFormData) => furnitureService.create({
+      ...data,
+    }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["furnitures"] });
+      router.push("/furniture");
+    },
+  })
 
+  const onSubmit: SubmitHandler<FurnitureFormData> = (data) => {
+    console.log(data);
+    addFurniture(data);
+  }
   return (
     <Card className="w-2/4 mx-auto mt-10 shadow-xl border-none">
       <form onSubmit={handleSubmit(onSubmit)}>

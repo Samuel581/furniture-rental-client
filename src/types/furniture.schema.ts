@@ -14,7 +14,12 @@ export const furnitureSchema = z.object({
     .min(4, { message: "Type must be at least 3 characters" })
     .max(30, { message: "Type must not exceed 50 characters" }),
     dailyRate: z
+    .coerce
     .number()
-    .min(0.25, { message: "Daily rate must be at least 0.25" }),
-    stock: z.number().min(1, { message: "Stock must be at least 1" }),
+    .min(0.25, { message: "Daily rate must be at least 0.25" })
+    .max(1000, { message: "Daily rate must not exceed 1000" }),
+  stock: z
+    .coerce
+    .number()
+    .min(1, { message: "Stock must be at least 1" })
 })

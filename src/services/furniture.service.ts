@@ -14,8 +14,13 @@ export const furnitureService = {
     },
 
     async create(furniture: Omit<Furniture, 'id' | 'isActive'>) {
-        const response = await api.post<Furniture>('/furniture', furniture);
-        return response.data;
+        try {
+            const response = await api.post<Furniture>('/furniture', furniture);
+            return response.data;
+        }
+        catch (error) {
+            console.error(error);
+        }
     },
 
     async update(id: string, furniture: Partial<Furniture>) {

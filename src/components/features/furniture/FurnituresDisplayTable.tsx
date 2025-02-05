@@ -7,7 +7,7 @@ import FurnitureActionButtons from "./FurnitureActionButtons";
 import { useQuery } from "@tanstack/react-query";
 import { furnitureService } from "@/services/furniture.service";
 import DataTable from "@/components/core/data-display/DataTable";
-import { toCurrency } from "@/lib/utils/parseUSD";
+import CreateFurnitureButton from "./CreateFurnitureButton";
 
 export const columnHelper = createColumnHelper<Furniture>();
 
@@ -34,7 +34,7 @@ const columns = [
     header: "Tarifa diaria",
     enableSorting: false,
     cell: (info) => (
-      <p className="text-green-500 font-semibold">{`$${toCurrency(info.getValue())}`}</p>
+      <p className="text-green-500 font-semibold">{info.getValue()}</p>
     ),
   }),
   columnHelper.accessor("isActive", {
@@ -88,6 +88,7 @@ function FurnituresDisplayTable() {
             return furniture.name.toLowerCase().includes(search);
           },
         }}
+        actionButton={<CreateFurnitureButton />}
       />
     </div>
   );
