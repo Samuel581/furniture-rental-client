@@ -42,6 +42,7 @@ interface DataTableProps<TData> {
   };
   isLoading?: boolean;
   error?: Error | null;
+  actionButton?: React.ReactNode;
 }
 
 function DataTable<TData>({
@@ -50,6 +51,7 @@ function DataTable<TData>({
   filterConfig,
   isLoading,
   error,
+  actionButton,
 }: DataTableProps<TData>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState<FilterState>({});
@@ -75,20 +77,24 @@ function DataTable<TData>({
   return (
     <div className="p-2">
       {filterConfig && (
-        <div className="mb-4 flex gap-4">
-          {filterConfig.filters.map((filter) => (
-            <FilterInput
-              key={filter.key}
-              filter={filter}
-              value={globalFilter[filter.key]?.toString() || ""}
-              onChange={(value: unknown) =>
-                setGlobalFilter((prev) => ({
-                  ...prev,
-                  [filter.key]: value as string | boolean,
-                }))
-              }
-            />
-          ))}
+        <div className="mb-4 flex justify-between space-x-4">
+          <div className="flex space-x-4">
+            {filterConfig.filters.map((filter) => (
+              <FilterInput
+                key={filter.key}
+                filter={filter}
+                value={globalFilter[filter.key]?.toString() || ""}
+                onChange={(value: unknown) =>
+                  setGlobalFilter((prev) => ({
+                    ...prev,
+                    [filter.key]: value as string | boolean,
+                  }))
+                }
+              />
+            ))}
+          </div>
+
+          {actionButton}
         </div>
       )}
       <div className="rounded-md border">
