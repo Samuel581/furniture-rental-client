@@ -9,6 +9,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { JSX } from "react";
+import { ChevronRight } from "lucide-react";
 
 export function DynamicBreadcrumb() {
   const pathname = usePathname();
@@ -35,7 +36,7 @@ export function DynamicBreadcrumb() {
 
       if (!isLast) {
         breadcrumbs.push(
-          <BreadcrumbSeparator key={`${href}-separator`} className="mx-2" />
+          <ChevronRight key={`separator-${href}`} className="mx-2" />
         );
       }
     });
@@ -49,7 +50,7 @@ export function DynamicBreadcrumb() {
         <BreadcrumbLink href="/">Home</BreadcrumbLink>
       </BreadcrumbItem>
       {pathname !== "/" && (
-        <BreadcrumbSeparator className="mx-2"/>
+        <ChevronRight key="separator-home" className="mx-2" />
       )}
       {generateBreadcrumbs()}
     </Breadcrumb>
