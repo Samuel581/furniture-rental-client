@@ -1,9 +1,10 @@
+import CombosDisplayTable from '@/components/features/combos/CombosDisplayTable'
 import React from 'react'
 
 function page() {
   return (
     <div>
-      Combos default page
+      <CombosDisplayTable />
     </div>
   )
 }
