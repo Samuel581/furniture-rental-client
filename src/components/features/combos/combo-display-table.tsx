@@ -5,7 +5,7 @@ import React from "react";
 import { Combo } from "@/types/combo.interface";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
-import DataTable from "@/components/core/data-display/DataTable";
+import DataTable from "@/components/core/data-display/base-data-table";
 import { ComboFurniture } from "@/types/comboFurniture.interface";
 
 export const columnHelper = createColumnHelper<Combo>();

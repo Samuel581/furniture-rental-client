@@ -6,7 +6,7 @@ import React from "react";
 import FurnitureActionButtons from "./FurnitureActionButtons";
 import { useQuery } from "@tanstack/react-query";
 import { furnitureService } from "@/services/furniture.service";
-import DataTable from "@/components/core/data-display/DataTable";
+import DataTable from "@/components/core/data-display/base-data-table";
 import CreateFurnitureButton from "./CreateFurnitureButton";
 
 export const columnHelper = createColumnHelper<Furniture>();

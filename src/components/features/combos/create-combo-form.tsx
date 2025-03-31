@@ -21,7 +21,7 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
-import FurnitureItemCard from "./FurnitureItemCard";
+import FurnitureItemCard from "./furniture-item-card";
 
 // First, let's fix the schema to match exactly what the API expects
 const furnitureItemSchema = z.object({

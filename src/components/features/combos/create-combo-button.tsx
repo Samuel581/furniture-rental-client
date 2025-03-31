@@ -1,6 +1,6 @@
 import React from 'react'
 
-function CreateClientButton() {
+function CreateComboButton() {
   return (
     <div>
       
@@ -8,4 +8,4 @@ function CreateClientButton() {
   )
 }
 
-export default CreateClientButton
+export default CreateComboButton

@@ -6,7 +6,7 @@ import React from "react";
 import { ActionButons } from "./client-table-action-buttons";
 import { useQuery } from "@tanstack/react-query";
 import { clientsService } from "@/services/client.service";
-import DataTable from "@/components/core/data-display/DataTable";
+import DataTable from "@/components/core/data-display/base-data-table";
 import { CreateClientButton } from "./create-client-button";
 
 //Colums data definition

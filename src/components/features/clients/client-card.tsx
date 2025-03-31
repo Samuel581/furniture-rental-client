@@ -20,7 +20,7 @@ function ClientInfoCard({ id }: ClientInfoCardProps) {
   });
 
   
-const MapComponent = dynamic(() => import("../../core/data-display/map"), {
+const MapComponent = dynamic(() => import("../../core/data-display/base-leaflet-map"), {
   ssr: false,
   loading: () => <div className="h-[400px] w-full bg-gray-100 animate-pulse" />,
 });
