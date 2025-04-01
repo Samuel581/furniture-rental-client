@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { useParams } from "next/navigation";
-import FurnitureCard from "@/components/features/furniture/FurnitureCard";
+import FurnitureCard from "@/components/features/furniture/furniture-card";
 
 function Page() {
   const { id } = useParams();

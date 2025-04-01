@@ -1,4 +1,4 @@
-import DisplayRow from "@/components/core/data-display/DisplayRow";
+import DisplayRow from "@/components/core/data-display/base-display-row";
 import { furnitureService } from "@/services/furniture.service";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";

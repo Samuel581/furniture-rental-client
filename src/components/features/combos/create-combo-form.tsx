@@ -22,6 +22,7 @@ import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import FurnitureItemCard from "./furniture-item-card";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 // First, let's fix the schema to match exactly what the API expects
 const furnitureItemSchema = z.object({
@@ -38,7 +39,7 @@ const comboCreationSchema = z.object({
     .min(1, "At least one furniture item is required"),
 });
 
-type FormFields = z.infer<typeof comboCreationSchema>;
+type ComboFormData = z.infer<typeof comboCreationSchema>;
 
 interface TempFurnitureItem {
   furnitureId: string;
@@ -62,7 +63,8 @@ function CreateComboForm() {
     register,
     handleSubmit,
     formState: { isSubmitting },
-  } = useForm<FormFields>({
+  } = useForm<ComboFormData>({
+    resolver: zodResolver(comboCreationSchema),
     defaultValues: {
       name: "",
       dailyRate: 1,
@@ -72,7 +74,7 @@ function CreateComboForm() {
   });
 
   const { mutateAsync: addCombos } = useMutation({
-    mutationFn: (data: FormFields) => combosService.create(data),
+    mutationFn: (data: ComboFormData) => combosService.create(data),
     onSuccess: () => {
       toast.success("Combo created successfully");
       router.push("/combos");
@@ -83,7 +85,7 @@ function CreateComboForm() {
     },
   });
 
-  const onSubmit = async (data: FormFields) => {
+  const onSubmit = async (data: ComboFormData) => {
     try {
       const submitData = {
         name: data.name,

@@ -3,11 +3,11 @@ import { Furniture } from "@/types/furniture.interface";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import React from "react";
-import FurnitureActionButtons from "./FurnitureActionButtons";
+import FurnitureActionButtons from "./furniture-action-buttons";
 import { useQuery } from "@tanstack/react-query";
 import { furnitureService } from "@/services/furniture.service";
 import DataTable from "@/components/core/data-display/base-data-table";
-import CreateFurnitureButton from "./CreateFurnitureButton";
+import CreateFurnitureButton from "./create-furniture-button";
 
 export const columnHelper = createColumnHelper<Furniture>();
 

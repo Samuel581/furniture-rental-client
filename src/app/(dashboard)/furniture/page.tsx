@@ -1,4 +1,4 @@
-import FurnituresDisplayTable from '@/components/features/furniture/FurnituresDisplayTable'
+import FurnituresDisplayTable from '@/components/features/furniture/furniture-display-table'
 import React from 'react'
 
 function page() {
