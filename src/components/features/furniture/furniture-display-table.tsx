@@ -8,6 +8,12 @@ import { useQuery } from "@tanstack/react-query";
 import { furnitureService } from "@/services/furniture.service";
 import DataTable from "@/components/core/data-display/base-data-table";
 import CreateFurnitureButton from "./create-furniture-button";
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export const columnHelper = createColumnHelper<Furniture>();
 
@@ -68,6 +74,20 @@ function FurnituresDisplayTable() {
   });
   return (
     <div>
+      <div className="flex flex-row gap-5 mb-5 justify-items-start">
+        <Card>
+          <CardHeader>
+            <CardTitle>{furnitures?.length}</CardTitle>
+            <CardDescription>Muebles en el sistema</CardDescription>
+          </CardHeader>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-green-300">{furnitures?.filter((furniture) => furniture.isActive).length}</CardTitle>
+            <CardDescription>Muebles activos</CardDescription>
+          </CardHeader>
+        </Card>
+      </div>
       <DataTable<Furniture>
         columns={columns}
         data={furnitures ?? []}
