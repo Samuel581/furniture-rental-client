@@ -1,9 +1,10 @@
+import RentalsCalendar from '@/components/features/rentals/rentals-calendar'
 import React from 'react'
 
 function page() {
   return (
     <div>
-      Rentals default page
+      <RentalsCalendar/>
     </div>
   )
 }
