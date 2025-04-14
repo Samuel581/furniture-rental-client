@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { useNextCalendarApp, ScheduleXCalendar } from '@schedule-x/react'
 import {
     createViewDay,
@@ -11,8 +11,36 @@ import {
 import { createEventsServicePlugin } from '@schedule-x/events-service'
 import { createEventModalPlugin} from '@schedule-x/event-modal'
 import "@schedule-x/theme-default/dist/index.css"
+import { useQuery } from '@tanstack/react-query';
+import { rentalsService } from '@/services/rental.service';
+import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import CreateRentalDialog from './create-rental-dialog';
 
 function RentalsCalendar() {
+    
+    // Api fetch
+
+    const {
+        data: rentals,
+        isLoading,
+        error,
+    } = useQuery({
+        queryKey: ["rentals"],
+        queryFn: rentalsService.getAll
+    })
+
+    //console.log(rentals)
     const eventsService = useMemo(() => createEventsServicePlugin(), [])
     const eventModal = createEventModalPlugin()
     const calendar = useNextCalendarApp({
@@ -23,22 +51,6 @@ function RentalsCalendar() {
             createViewMonthAgenda(),
         ],
         defaultView: 'month-grid',
-        events: [
-            {
-                id: '1',
-                start: '2025-04-01',
-                end: '2025-04-01',
-                title: 'Pedido de alquiler',
-                description: 'Description for Event 1',
-            },
-            {
-                id: '2',
-                title: 'Pedido para evento privado',
-                start: '2025-04-02',
-                end: '2025-04-03',
-                description: 'Description for Event 2',
-            },
-        ],
         plugins: [eventsService, eventModal],
         callbacks: {
             onRender: () => {
@@ -46,9 +58,46 @@ function RentalsCalendar() {
             }
         }
     })
+
+    console.log(rentals)
+
+    useEffect(() => {
+        if(rentals && !isLoading) {
+            const formattedEvents = rentals?.map((rental) => {
+              let color;
+            switch(rental.rentalStatus) {
+                case 'RESERVED':
+                    color = '#4a6fdc'; // blue
+                    break;
+                case 'PAYED':
+                    color = '#50b85c'; // green
+                    break;
+                case 'DELIVERED':
+                    color = '#808080'; // gray
+                    break;
+                case 'CANCELLED':
+                    color = '#d95555'; // red
+                    break;
+                default:
+                    color = '#f7c244'; // yellow/orange for other statuses
+            }
+                return {
+                    id: rental.id,
+                    start: rental.startDate.slice(0,10),
+                    end: rental.endDate.slice(0,10),
+                    title: rental.client.name,
+                    description: `Total cost: $${rental.totalAmount} with status: ${rental.rentalStatus}`,
+                    color: color
+                }
+            })
+            console.log('Formatted events:', JSON.stringify(formattedEvents, null, 2))
+            eventsService.set(formattedEvents)
+        }
+    }, [rentals])
   return (
     <div>
       <ScheduleXCalendar calendarApp={calendar}/>
+      <CreateRentalDialog/>
     </div>
   )
 }
