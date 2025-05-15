@@ -1,4 +1,4 @@
-import CombosDisplayTable from "@/components/features/combos/CombosDisplayTable";
+import CombosDisplayTable from "@/components/features/combos/combo-display-table";
 import React from "react";
 
 function page() {

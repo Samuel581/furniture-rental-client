@@ -6,7 +6,6 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbPage,
-  BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { JSX } from "react";
 import { ChevronRight } from "lucide-react";

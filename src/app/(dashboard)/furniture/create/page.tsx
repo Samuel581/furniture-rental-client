@@ -1,4 +1,4 @@
-import FurnitureForm from '@/components/features/furniture/FurnitureForm'
+import FurnitureForm from '@/components/features/furniture/furniture-form'
 import React from 'react'
 
 export default function Page() {
