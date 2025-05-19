@@ -1,7 +1,9 @@
 import React from "react";
 import Sidebar from "./sidebar";
 import { DynamicBreadcrumb } from "./dynamic-breadcrumb";
-
+import { Button } from "../ui/button";
+import { PlusCircle, AlignJustify } from "lucide-react";
+import { BaseDrawer } from "../core/data-display/base-nav-drawer";
 export default function MainLayout({
   children,
 }: {
@@ -13,7 +15,8 @@ export default function MainLayout({
         <Sidebar />
       </div>
       <main className="md:pl-72">
-        <div className="p-4 border-b">
+        <div className="p-4 border-b flex items-center gap-4">
+          <BaseDrawer/>
           <DynamicBreadcrumb />
         </div>
         <div className="p-4">{children}</div>
