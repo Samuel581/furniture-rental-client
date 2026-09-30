@@ -1,17 +1,20 @@
 "use client";
 import React from "react";
-import z from "zod";
-import { furnitureSchema } from "@/types/furniture.schema";
 import { useRouter } from "next/navigation";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "react-hot-toast";
 import { Card, CardContent } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { furnitureService } from "@/services/furniture.service";
-type FurnitureFormData = z.infer<typeof furnitureSchema>;
+import { getApiErrorMessage } from "@/lib/api/errors";
+import {
+  furnitureSchema,
+  FurnitureFormInput,
+  FurnitureFormOutput,
+} from "@/lib/validation/schemas/furniture";
+import FurnitureFormFields from "./furniture-form-fields";
 
 function FurnitureForm() {
   const queryClient = useQueryClient();
@@ -19,69 +22,44 @@ function FurnitureForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<FurnitureFormData>({
+    formState: { errors },
+  } = useForm<FurnitureFormInput, unknown, FurnitureFormOutput>({
     resolver: zodResolver(furnitureSchema),
     defaultValues: {
       name: "",
       color: "",
       type: "",
-      dailyRate: 0,
-      stock: 0,
+      dailyRate: "",
+      stock: "",
     },
   });
 
-  const { mutateAsync: addFurniture } = useMutation({
-    mutationFn: (data: FurnitureFormData) => furnitureService.create({
-      ...data,
-    }),
+  const addFurniture = useMutation({
+    mutationFn: (data: FurnitureFormOutput) => furnitureService.create(data),
     onSuccess: () => {
+      toast.success("Mueble creado correctamente");
       queryClient.invalidateQueries({ queryKey: ["furnitures"] });
       router.push("/furniture");
     },
+    onError: (error) => {
+      toast.error(getApiErrorMessage(error, "No se pudo crear el mueble"));
+    },
   })
 
-  const onSubmit: SubmitHandler<FurnitureFormData> = (data) => {
-    console.log(data);
-    addFurniture(data);
+  const onSubmit = (data: FurnitureFormOutput) => {
+    addFurniture.mutate(data);
   }
   return (
     <Card className="w-2/4 mx-auto mt-10 shadow-xl border-none">
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <CardContent className="space-y-4">
-          <div>
-            <Label htmlFor="name">Nombre del mueble</Label>
-            <Input {...register("name")} type="text" />
-            {errors.name && <p className="text-red-500">{errors.name.message}</p>}
-          </div>
-          <div>
-            <Label htmlFor="color">Color</Label>
-            <Input {...register("color")} type="text" />
-            {errors.color && <p className="text-red-500">{errors.color.message}</p>}
-          </div>
-          <div>
-            <Label htmlFor="type">Tipo</Label>
-            <Input {...register("type")} type="text" />
-            {errors.type && <p className="text-red-500">{errors.type.message}</p>}
-          </div>
-          <div className="flex flex-row gap-5 ">
-            <div className="w-full">
-              <Label htmlFor="dailyRate">Tarifa diaria</Label>
-              <Input {...register("dailyRate")} type="number" />
-              {errors.dailyRate && <p className="text-red-500">{errors.dailyRate.message}</p>}
-            </div>
-            <div className="w-full">
-              <Label htmlFor="stock">Stock</Label>
-              <Input {...register("stock")} type="number" />
-              {errors.stock && <p className="text-red-500">{errors.stock.message}</p>}
-            </div>
-          </div>
+          <FurnitureFormFields register={register} errors={errors} />
           <Button variant="default"
             type="submit"
-            disabled={isSubmitting}
+            disabled={addFurniture.isPending}
             className="text-white p-2 rounded-md"
           >
-            {isSubmitting ? "Creando..." : "Crear"}
+            {addFurniture.isPending ? "Creando..." : "Crear"}
           </Button>
         </CardContent>
       </form>
