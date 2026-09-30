@@ -1,6 +1,5 @@
 import { api } from "@/lib/api/axios";
 import { Client } from "@/types/user.interface";
-import axios from "axios";
 
 export const clientsService = {
     // Get all clients
@@ -24,17 +23,7 @@ export const clientsService = {
   
     // Update a client
     async update(id: string, client: Partial<Client>) {
-      try {
-        console.log('Sending update request with data:', client);
-        const response = await api.patch<Client>(`/client/${id}`, client);
-        return response.data;
-      } catch (error) {
-        console.error(`Error updating client ${id}:`, error);
-        if (axios.isAxiosError(error) && error.response) {
-          console.error('Server response:', error.response.data);
-          console.error('Status code:', error.response.status);
-        }
-        throw error;
-      }
+      const response = await api.patch<Client>(`/client/${id}`, client);
+      return response.data;
     }
   };

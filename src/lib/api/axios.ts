@@ -9,9 +9,6 @@ export const api = axios.create({
   withCredentials: true
 });
 
-// Debug: Log the API URL being used
-console.log('API URL:', process.env.NEXT_PUBLIC_API_URL);
-
 // Add request interceptor to handle errors
 api.interceptors.request.use(
   (config) => {

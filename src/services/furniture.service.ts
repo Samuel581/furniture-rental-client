@@ -1,6 +1,5 @@
 import { api } from "@/lib/api/axios";
 import { Furniture } from "@/types/furniture.interface";
-// import axios from "axios";
 
 export const furnitureService = {
     async getAll() {
@@ -13,14 +12,9 @@ export const furnitureService = {
         return response.data;
     },
 
-    async create(furniture: Omit<Furniture, 'id' | 'isActive'>) {
-        try {
-            const response = await api.post<Furniture>('/furniture', furniture);
-            return response.data;
-        }
-        catch (error) {
-            console.error(error);
-        }
+    async create(furniture: Omit<Furniture, 'id' | 'isActive' | 'color'> & { color?: string }) {
+        const response = await api.post<Furniture>('/furniture', furniture);
+        return response.data;
     },
 
     async update(id: string, furniture: Partial<Furniture>) {
