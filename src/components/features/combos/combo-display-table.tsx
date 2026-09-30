@@ -7,6 +7,7 @@ import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import DataTable from "@/components/core/data-display/base-data-table";
 import { ComboFurniture } from "@/types/comboFurniture.interface";
+import ComboTableDisplayButtons from "./combo-table-buttons";
 
 export const columnHelper = createColumnHelper<Combo>();
 
@@ -50,6 +51,11 @@ const colunns = [
         ))}
       </div>
     ),
+  }),
+  columnHelper.display({
+    id: "actions",
+    header: "Acciones",
+    cell: (props) => <ComboTableDisplayButtons combo={props.row.original} />,
   }),
 ] as ColumnDef<Combo>[];
 
