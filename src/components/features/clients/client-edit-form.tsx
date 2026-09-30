@@ -1,48 +1,20 @@
-// components/Form.tsx
 "use client";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Input } from "@/components/ui/input";
+import { toast } from "react-hot-toast";
 import { Button } from "@/components/ui/button";
-import { CardContent, CardFooter } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
+import { CardFooter } from "@/components/ui/card";
 import { useParams, useRouter } from "next/navigation";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { clientsService } from "@/services/client.service";
 import { useEffect } from "react";
-
-const clientFormSchema = z.object({
-  name: z
-    .string()
-    .min(2, { message: "Name must be at least 2 characters" })
-    .max(50, { message: "Name must not exceed 50 characters" }),
-  phone: z
-    .string()
-    .min(8, { message: "Phone must be at least 10 digits" })
-    .optional()
-    .transform((phone) => (phone ? [phone] : [])),
-  addressReference: z
-    .string()
-    .max(200, { message: "Address reference must not exceed 200 characters" })
-    .optional(),
-  notes: z
-    .string()
-    .max(200, { message: "Notes must not exceed 200 characters" })
-    .optional(),
-  latitude: z
-    .string()
-    .optional()
-    .transform((val) => (val ? Number(val) : undefined))
-    .pipe(z.number().optional()),
-  longitude: z
-    .string()
-    .optional()
-    .transform((val) => (val ? Number(val) : undefined))
-    .pipe(z.number().optional()),
-});
-
-type ClientFormData = z.infer<typeof clientFormSchema>;
+import { getApiErrorMessage } from "@/lib/api/errors";
+import {
+  clientSchema,
+  ClientFormInput,
+  ClientFormOutput,
+} from "@/lib/validation/schemas/client";
+import ClientFormFields from "./client-form-fields";
 
 export default function EditClientForm() {
   const params = useParams();
@@ -50,7 +22,11 @@ export default function EditClientForm() {
   const queryClient = useQueryClient();
   const clientId = params.id as string;
 
-  const { data: client, isLoading: isLoadingClient } = useQuery({
+  const {
+    data: client,
+    isLoading: isLoadingClient,
+    isError,
+  } = useQuery({
     queryKey: ["client", clientId],
     queryFn: () => clientsService.getById(clientId),
     enabled: !!clientId, // Only fetch if we have an ID
@@ -61,104 +37,69 @@ export default function EditClientForm() {
     handleSubmit,
     formState: { errors },
     reset: resetForm,
-  } = useForm<ClientFormData>({
-    resolver: zodResolver(clientFormSchema),
+  } = useForm<ClientFormInput, unknown, ClientFormOutput>({
+    resolver: zodResolver(clientSchema),
     defaultValues: {
       name: "",
-      phone: [],
+      phone: "",
       addressReference: "",
       notes: "",
-      latitude: 0,
-      longitude: 0,
+      latitude: "",
+      longitude: "",
     },
   });
 
   const updateClient = useMutation({
-    mutationFn: (data: ClientFormData) => clientsService.update(clientId, data),
+    mutationFn: (data: ClientFormOutput) =>
+      clientsService.update(clientId, {
+        ...data,
+        // Send an empty string so clearing the field clears it on the API
+        notes: data.notes ?? "",
+        // Only the first phone is editable, keep any additional ones
+        phone: [data.phone, ...(client?.phone.slice(1) ?? [])],
+      }),
     onSuccess: () => {
+      toast.success("Cliente actualizado correctamente");
       queryClient.invalidateQueries({ queryKey: ["clients"] });
+      queryClient.invalidateQueries({ queryKey: ["client", clientId] });
       router.push("/clients");
+    },
+    onError: (error) => {
+      toast.error(getApiErrorMessage(error, "No se pudo actualizar el cliente"));
     },
   });
 
   useEffect(() => {
     if (client) {
-      const formattedClient = {
-        ...client,
-        latitude: client.latitude || undefined,
-        longitude: client.longitude || undefined,
-        phone: client.phone || [],
-      };
-      resetForm(formattedClient)
+      resetForm({
+        name: client.name,
+        phone: client.phone?.[0] ?? "",
+        addressReference: client.addressReference ?? "",
+        notes: client.notes ?? "",
+        latitude: client.latitude ?? "",
+        longitude: client.longitude ?? "",
+      });
     }
   }, [client, resetForm]);
 
-  const onSubmit = async (data: ClientFormData) => {
-    try {
-      await updateClient.mutateAsync(data);
-    } catch (error) {
-      console.error("Error updating client:", error);
-    }
+  const onSubmit = (data: ClientFormOutput) => {
+    updateClient.mutate(data);
   };
 
   if (isLoadingClient) {
-    return <div>Loading client data...</div>;
+    return <div>Cargando datos del cliente...</div>;
+  }
+
+  if (isError) {
+    return <div className="text-red-500">No se pudo cargar el cliente.</div>;
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <CardContent className="space-y-4">
-        {/* Name Field */}
-        <div>
-          <Label htmlFor="name">Nombre</Label>
-          <Input id="name" {...register("name")} defaultValue={""} />
-          {errors.name && (
-            <p className="text-red-500 text-sm">{errors.name.message}</p>
-          )}
-        </div>
-        <div>
-          <Label htmlFor="phone">Telefono</Label>
-          <Input id="phone" {...register("phone")} defaultValue={""} />
-          {errors.name && (
-            <p className="text-red-500 text-sm">{errors.name.message}</p>
-          )}
-        </div>
-        <div>
-          <Label htmlFor="addressReference">Referencia de direccion</Label>
-          <Input
-            id="addressReference"
-            {...register("addressReference")}
-            defaultValue={""}
-          />
-          {errors.name && (
-            <p className="text-red-500 text-sm">{errors.name.message}</p>
-          )}
-        </div>
-        <div>
-          <Label htmlFor="notes">Notas</Label>
-          <Input id="notes" {...register("notes")} defaultValue={""} />
-          {errors.name && (
-            <p className="text-red-500 text-sm">{errors.name.message}</p>
-          )}
-        </div>
-        <div>
-          <Label htmlFor="latitude">Latitud</Label>
-          <Input id="latitude" {...register("latitude")} defaultValue={""} />
-          {errors.name && (
-            <p className="text-red-500 text-sm">{errors.longitude?.message}</p>
-          )}
-        </div>
-        <div>
-          <Label htmlFor="longitude">Longitude</Label>
-          <Input id="longitude" {...register("longitude")} defaultValue={""} />
-          {errors.name && (
-            <p className="text-red-500 text-sm">{errors.latitude?.message}</p>
-          )}
-        </div>
-      </CardContent>
+    <form onSubmit={handleSubmit(onSubmit)} noValidate>
+      <ClientFormFields register={register} errors={errors} />
       <CardFooter>
-        <Button type="submit" className="w-full">
-          Submit
+        <Button type="submit" className="w-full" disabled={updateClient.isPending}>
+          {updateClient.isPending ? "Guardando..." : "Guardar cambios"}
         </Button>
       </CardFooter>
     </form>
